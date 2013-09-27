@@ -173,10 +173,9 @@ sub rearrange {
     my $TABLE = $params->{alias};
 
     my $id = $http_params->{'id[]'};
-    my $i = 1;
-    for (@$id) {
-        database->quick_update($TABLE, { id => $_ }, { sort => $i });
-        $i++;
+    if (@$id) {
+        my $ids_list = join ", ", map { database->quote($_) } @$id;
+        database->do("UPDATE $TABLE SET sort = field(id, $ids_list) WHERE id IN (" . join(',', @$id) . ")");
     }
 }
 

@@ -49,13 +49,22 @@ sub main {
                 database->quick_update($TABLE, { id => $id }, $where) if $where;
             }
 
-            return redirect "http://". request->host . $SCRIPT;
+            return redirect "http://". request->host . $SCRIPT . '?' . request->{env}->{QUERY_STRING};
+        }
+    }
+
+    my $where = {};
+    for my $filter (grep(/^filter/, keys %$http_params)) {
+        my $f = ($filter =~ /^filter_(.+)$/)[0];
+        if (grep(/^$f$/, map { $_->{name} } @{$params->{fields}})) {
+            $where->{$f} = $http_params->{$filter};
         }
     }
 
     my $options = {};
     $options->{order_by} = 'sort' if $params->{sortable};
-    $p->{list} = [ database->quick_select($TABLE, {}, $options) ];
+
+    $p->{list} = [ database->quick_select($TABLE, $where, $options) ];
 
     return template $TPL, $p;
 }
@@ -108,16 +117,25 @@ sub edit {
                 }
 
                 database->quick_update($TABLE, { id => $item->{id} }, $p->{form});
-                return redirect "http://". request->host . $SCRIPT;
+                return redirect "http://". request->host . $SCRIPT . '?' . request->{env}->{QUERY_STRING};
             }
         }
         else {
             $p->{form} = $item;
         }
 
+        my $where = {};
+        for my $filter (grep(/^filter/, keys %$http_params)) {
+            my $f = ($filter =~ /^filter_(.+)$/)[0];
+            if (grep(/^$f$/, map { $_->{name} } @{$params->{fields}})) {
+                $where->{$f} = $http_params->{$filter};
+            }
+        }
+
         my $options = {};
         $options->{order_by} = 'sort' if $params->{sortable};
-        $p->{list} = [ database->quick_select($TABLE, {}, $options) ];
+
+        $p->{list} = [ database->quick_select($TABLE, $where, $options) ];
 
         return template $TPL, $p;
     }

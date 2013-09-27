@@ -32,6 +32,13 @@
             </button>
             <div class="nav-collapse collapse">
                 <ul class="nav">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Баги <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/bugs/?filter_status=todo">Новые</a></li>
+                            <li><a href="/bugs/?filter_status=done">Сделанные</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>

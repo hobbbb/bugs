@@ -8,6 +8,7 @@
     <meta name="author" content="">
 
     <!-- Le styles -->
+    <link rel="stylesheet" href="/css/error.css">
     <link rel="stylesheet" href="/css/bootstrap.css">
     <link rel="stylesheet" href="/css/smoothness/jquery-ui.css" />
     <link rel="stylesheet" href="/css/main.css" />

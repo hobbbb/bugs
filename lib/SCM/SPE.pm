@@ -172,7 +172,7 @@ sub rearrange {
 
     my $TABLE = $params->{alias};
 
-    my $id = $http_params->{'id[]'};
+    my $id = [ map { $_ if /^\d+$/ } @{$http_params->{'id[]'}} ];
     if (@$id) {
         my $ids_list = join ", ", map { database->quote($_) } @$id;
         database->do("UPDATE $TABLE SET sort = field(id, $ids_list) WHERE id IN (" . join(',', @$id) . ")");
